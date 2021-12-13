@@ -11,6 +11,7 @@ do
 	wait $j
 done
 
-git commit --all --allow-empty --message="$(date)"
+git add -A
+git commit --allow-empty --message="$(date)"
 git push origin master
 
