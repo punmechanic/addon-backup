@@ -25,9 +25,11 @@ local hasFury = nil
 local L = mod:GetLocale()
 if L then
 	L.name = "Agatha"
-	-- L.warmup_trigger1 = "You are too late! Levia's power is mine! Using her knowledge, my minions will infiltrate the Kirin Tor and dismantle it from the inside!" -- 35
-	-- L.warmup_trigger2 = "Even now, my sayaad tempt your weak-willed mages. Your allies will surrender willingly to the Legion!" -- 16
-	-- L.warmup_trigger3 = "But first, you must be punished for taking away my little pet." -- 3
+	L.levia = "Levia" -- Shortcut for warmup_trigger1 so most locales should still work if you enable quick enough
+
+	L.warmup_trigger1 = "You are too late! Levia's power is mine! Using her knowledge, my minions will infiltrate the Kirin Tor and dismantle it from the inside!" -- 35
+	L.warmup_trigger2 = "Even now, my sayaad tempt your weak-willed mages. Your allies will surrender willingly to the Legion!" -- 16
+	L.warmup_trigger3 = "But first, you must be punished for taking away my little pet." -- 3
 
 	-- L.servant_trigger = "Kill the Imp Servants before they energize Agatha!"
 	-- L.umbral_trigger = "Protect me, my children! I will give you the power!"
@@ -101,7 +103,7 @@ function mod:OnEngage()
 	self:Bar(243027, 62, CL.count:format(self:SpellName(243027), partyCount)) -- Shadow Shield
 
 	self:RegisterTargetEvents("AddScanner")
-	self:RegisterUnitEvent("UNIT_HEALTH_FREQUENT", nil, "boss1")
+	self:RegisterUnitEvent("UNIT_HEALTH", nil, "boss1")
 end
 
 --------------------------------------------------------------------------------
@@ -176,9 +178,15 @@ end
 ---------------------------------------
 -- Agatha
 
-function mod:Warmup(event)
+function mod:Warmup(event, msg)
 	self:UnregisterEvent(event)
-	self:Bar("warmup", 35, CL.active, "sha_spell_shaman_lavaburst_nightborne")
+	if msg:find(L.warmup_trigger1, nil, true) or msg:find(L.levia, nil, true) then
+		self:Bar("warmup", 35, CL.active, "sha_spell_shaman_lavaburst_nightborne")
+	elseif msg:find(L.warmup_trigger2, nil, true) then
+		self:Bar("warmup", 16.8, CL.active, "sha_spell_shaman_lavaburst_nightborne")
+	elseif msg:find(L.warmup_trigger3, nil, true) then
+		self:Bar("warmup", 3.4, CL.active, "sha_spell_shaman_lavaburst_nightborne")
+	end
 end
 
 do
@@ -254,11 +262,11 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(unit, spellName, _, _, spellId)
 	end
 end
 
-function mod:UNIT_HEALTH_FREQUENT(unit)
-	local hp = UnitHealth(unit) / UnitHealthMax(unit) * 100
+function mod:UNIT_HEALTH(event, unit)
+	local hp = self:GetHealth(unit)
 	if hp < 55 then
 		self:MessageOld(242989, "cyan", nil, CL.soon:format(self:SpellName(242987)), false)
 		-- Seems like it's based on damage done after the initial 50% cast, cba to track that
-		self:UnregisterUnitEvent("UNIT_HEALTH_FREQUENT", unit)
+		self:UnregisterUnitEvent(event, unit)
 	end
 end
