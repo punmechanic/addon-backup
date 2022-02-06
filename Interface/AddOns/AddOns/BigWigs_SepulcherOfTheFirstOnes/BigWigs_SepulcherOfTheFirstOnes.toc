@@ -22,7 +22,7 @@
 ## Notes-ruRU: BigWigs Sepulcher of the First Ones Modules
 ## Notes-zhCN: BigWigs Sepulcher of the First Ones Modules
 ## Notes-zhTW: BigWigs Sepulcher of the First Ones Modules
-## Version: v233.1
+## Version: v233.2
 
 ## LoadOnDemand: 1
 ## Dependencies: BigWigs

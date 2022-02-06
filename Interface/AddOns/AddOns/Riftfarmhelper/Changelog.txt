@@ -1,0 +1,2 @@
+1.1 Updated to reuse the old macro so that one can leave it in the action bar. Refresh for macro frame implemented to add usability.
+1.1.1 Bugfixes

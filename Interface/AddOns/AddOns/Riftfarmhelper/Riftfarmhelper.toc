@@ -1,0 +1,5 @@
+## Interface: 90105
+## Title: Riftfarmhelper
+## Author: Slothpal/Blackrock
+## Version: 1.1.1
+Riftfarmhelper.lua
